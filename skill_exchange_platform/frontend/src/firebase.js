@@ -2,7 +2,6 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCaxAC7VAjc0L0jyc7OFSMYUdlgPFGHSD8",
   authDomain: "skill-swap-system.firebaseapp.com",
   projectId: "skill-swap-system",
   storageBucket: "skill-swap-system.firebasestorage.app",
