@@ -1,0 +1,10 @@
+node_modules/
+skill_exchange_platform/frontend/node_modules/
+__pycache__/
+.env
+*.pyc
+.venv/
+venv/
+dist/
+build/
+.DS_Store
