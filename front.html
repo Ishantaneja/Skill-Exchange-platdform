@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap - Skill Exchange Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 28px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .skill-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-details h3 {
+            color: #1a202c;
+            margin-bottom: 3px;
+            font-size: 18px;
+        }
+
+        .level {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .skill-info {
+            margin-bottom: 15px;
+        }
+
+        .skill-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .offering {
+            color: #48bb78;
+        }
+
+        .seeking {
+            color: #4299e1;
+        }
+
+        .skill-value {
+            color: #1a202c;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .description {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .category-badge {
+            background: #edf2f7;
+            color: #667eea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .connect-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .connect-btn:hover {
+            color: #5568d3;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #1a202c;
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #718096;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #1a202c;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">SS</div>
+                <h1>SkillSwap</h1>
+            </div>
+            <button class="btn-primary" onclick="openModal()">
+                <span>+</span>
+                Add Skill
+            </button>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search skills..." oninput="filterSkills()">
+            </div>
+            <div class="filter-buttons" id="filterButtons">
+                <button class="filter-btn active" onclick="filterByCategory('All')">All</button>
+                <button class="filter-btn" onclick="filterByCategory('Technology')">Technology</button>
+                <button class="filter-btn" onclick="filterByCategory('Arts')">Arts</button>
+                <button class="filter-btn" onclick="filterByCategory('Music')">Music</button>
+                <button class="filter-btn" onclick="filterByCategory('Languages')">Languages</button>
+                <button class="filter-btn" onclick="filterByCategory('Business')">Business</button>
+                <button class="filter-btn" onclick="filterByCategory('Sports')">Sports</button>
+                <button class="filter-btn" onclick="filterByCategory('Cooking')">Cooking</button>
+            </div>
+        </div>
+
+        <!-- Skills Grid -->
+        <div class="skills-grid" id="skillsGrid"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Your Skill</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="userName" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label>Skill You're Offering</label>
+                <input type="text" id="offering" placeholder="e.g., Web Development">
+            </div>
+            <div class="form-group">
+                <label>Skill You're Seeking</label>
+                <input type="text" id="seeking" placeholder="e.g., Graphic Design">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" placeholder="Describe your skills and experience..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Your Level</label>
+                <select id="level">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option value="Technology">Technology</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Music">Music</option>
+                    <option value="Languages">Languages</option>
+                    <option value="Business">Business</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Cooking">Cooking</option>
+                </select>
+            </div>
+            <button class="btn-submit" onclick="addSkill()">Add Skill Exchange</button>
+        </div>
+    </div>
+
+    <script>
+        let skills = [
+            {
+                id: 1,
+                userName: 'Sarah Chen',
+                userAvatar: 'SC',
+                offering: 'Web Development',
+                seeking: 'Graphic Design',
+                description: 'Full-stack developer with 5 years experience. Can teach React, Node.js, and MongoDB.',
+                level: 'Expert',
+                category: 'Technology'
+            },
+            {
+                id: 2,
+                userName: 'Mike Johnson',
+                userAvatar: 'MJ',
+                offering: 'Guitar Lessons',
+                seeking: 'Spanish Language',
+                description: 'Classical guitarist with 10 years teaching experience. All levels welcome.',
+                level: 'Intermediate',
+                category: 'Music'
+            },
+            {
+                id: 3,
+                userName: 'Elena Rodriguez',
+                userAvatar: 'ER',
+                offering: 'Photography',
+                seeking: 'Video Editing',
+                description: 'Professional photographer specializing in portraits and landscapes.',
+                level: 'Expert',
+                category: 'Arts'
+            },
+            {
+                id: 4,
+                userName: 'David Kim',
+                userAvatar: 'DK',
+                offering: 'Digital Marketing',
+                seeking: 'Data Analysis',
+                description: 'SEO and social media expert. Helped 20+ businesses grow their online presence.',
+                level: 'Expert',
+                category: 'Business'
+            },
+            {
+                id: 5,
+                userName: 'Lisa Martinez',
+                userAvatar: 'LM',
+                offering: 'Yoga Instruction',
+                seeking: 'Meditation Techniques',
+                description: 'Certified yoga instructor with focus on stress relief and flexibility.',
+                level: 'Intermediate',
+                category: 'Sports'
+            }
+        ];
+
+        let currentFilter = 'All';
+
+        function renderSkills() {
+            const grid = document.getElementById('skillsGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = skills.filter(skill => {
+                const matchesSearch = skill.offering.toLowerCase().includes(searchTerm) ||
+                                    skill.seeking.toLowerCase().includes(searchTerm) ||
+                                    skill.userName.toLowerCase().includes(searchTerm);
+                const matchesCategory = currentFilter === 'All' || skill.category === currentFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty-state">No skills found. Try adjusting your search.</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(skill => `
+                <div class="skill-card">
+                    <div class="user-info">
+                        <div class="avatar">${skill.userAvatar}</div>
+                        <div class="user-details">
+                            <h3>${skill.userName}</h3>
+                            <span class="level">${skill.level}</span>
+                        </div>
+                    </div>
+                    <div class="skill-info">
+                        <div class="skill-label offering">📚 Offering</div>
+                        <div class="skill-value">${skill.offering}</div>
+                    </div>
+                    <div class="skill-info">
+                        <div class="skill-label seeking">🔍 Seeking</div>
+                        <div class="skill-value">${skill.seeking}</div>
+                    </div>
+                    <p class="description">${skill.description}</p>
+                    <div class="card-footer">
+                        <span class="category-badge">${skill.category}</span>
+                        <button class="connect-btn" onclick="connect('${skill.userName}')">
+                            💬 Connect
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            
+            // Update active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            renderSkills();
+        }
+
+        function filterSkills() {
+            renderSkills();
+        }
+
+        function openModal() {
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            clearForm();
+        }
+
+        function clearForm() {
+            document.getElementById('userName').value = '';
+            document.getElementById('offering').value = '';
+            document.getElementById('seeking').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('level').value = 'Beginner';
+            document.getElementById('category').value = 'Technology';
+        }
+
+        function addSkill() {
+            const userName = document.getElementById('userName').value.trim();
+            const offering = document.getElementById('offering').value.trim();
+            const seeking = document.getElementById('seeking').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const level = document.getElementById('level').value;
+            const category = document.getElementById('category').value;
+
+            if (!userName || !offering || !seeking || !description) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            const newSkill = {
+                id: Date.now(),
+                userName,
+                userAvatar: initials,
+                offering,
+                seeking,
+                description,
+                level,
+                category
+            };
+
+            skills.unshift(newSkill);
+            renderSkills();
+            closeModal();
+        }
+
+        function connect(userName) {
+            alert(`Connection request sent to ${userName}! They will be notified.`);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        renderSkills();
+    </script>
+</body>
+</html>
